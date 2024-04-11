@@ -29,14 +29,8 @@ DATA = {
 #     'ингредиент2': количество2,
 #   }
 # }
-
-def omlet(request):
-	servings = request.GET.get('servings')
-	dict_result = DATA['omlet']
-	try:
-		persons = int(servings)
-	except:
-		persons = 0
+def ret_ingridients_dict(name = "", persons=0):
+	dict_result = DATA[name]
 	result = {}
 	if persons !=0:
 		keys = dict_result.keys()
@@ -47,25 +41,24 @@ def omlet(request):
 			except:
 				int_res = 0
 	result['recipe'] = dict_result
+	return result
+
+def omlet(request):
+	servings = request.GET.get('servings')
+	try:
+		persons = int(servings)
+	except:
+		persons = 0
+	result = ret_ingridients_dict('omlet', persons)
 	return render(request, 'calculator/index.html', result)
 
 def pasta(request):
 	servings = request.GET.get('servings')
-	dict_result = DATA['pasta']
 	try:
 		persons = int(servings)
 	except:
 		persons = 0
-	result = {}
-	if persons !=0:
-		keys = dict_result.keys()
-		for key in keys:
-			try:
-				int_res = int(dict_result[key])
-				dict_result[key] = int_res*persons
-			except:
-				int_res = 0
-	result['recipe'] = dict_result
+	result = ret_ingridients_dict('pasta', persons)
 	return render(request, 'calculator/index.html', result)
 
 def home_view(request):
